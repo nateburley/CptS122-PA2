@@ -33,6 +33,9 @@ void print_list(struct record *pList);
 //Function that inserts a new node at the end of the list
 void insert_at_end(struct record **head_ptr, FILE *infile);
 
+//Function that inserts a new node at the beginning of the list
+void insert_at_front(struct record **head_ptr, FILE *infile);
+
 //Function that creates the list
 void create_list(struct record **head_ptr, FILE *infile);
 

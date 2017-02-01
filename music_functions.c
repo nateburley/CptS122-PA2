@@ -101,7 +101,6 @@ Record *create_node(FILE *infile)
     new_node->length.minutes = 0;
     new_node->length.minutes = 0;
   }
-  /////////
 
   //Sets the pointers to null (for now...)
   new_node->previous = NULL;
@@ -159,13 +158,37 @@ void insert_at_end(struct record **head_ptr, FILE *infile)
   }
 }
 
+//Function that inserts a new node at the beginning of the list
+void insert_at_front(struct record **head_ptr, FILE *infile)
+{
+  //Makes new node head, if list is empty
+  if (*head_ptr == NULL)
+  {
+    Record *new_node = create_node(infile);
+    *head_ptr = new_node;
+    //printf("FIRST NODE ARTIST: %s\n\n", (*head_ptr)->artist);
+    new_node->previous = NULL;
+    new_node->next = NULL;
+  }
+  else
+  {
+    Record *new_node = create_node(infile);
+    Record *holder = *head_ptr;
+    *head_ptr = new_node;
+    new_node->next = holder;
+    new_node->previous = NULL;
+    holder->previous = new_node;
+  }
+}
+
 //Function that creates the list
 void create_list(struct record **head_ptr, FILE *infile)
 {
   int counter = 1;
   while (!feof(infile))
   {
-    insert_at_end(head_ptr, infile);
+    insert_at_front(head_ptr, infile);
+    //insert_at_end(head_ptr, infile);
     //printf("Line %d\n", counter);
     counter++;
   }
