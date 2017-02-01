@@ -59,21 +59,9 @@ Record *create_node(FILE *infile)
     strcpy(new_node->genre, "Unknown Genre");
   }
 
-  //Stores the length
-  char *length = NULL;
+  //Stores the length (But doesn't parse it yet)
   temp = strtok(NULL, delim);
-  length = strtok(temp, ":");
-  if (length != '\0')
-  {
-    new_node->length.minutes = atoi(length);
-    length = strtok(NULL, ":");
-    new_node->length.seconds = atoi(length);
-  }
-  else
-  {
-    new_node->length.minutes = 0;
-    new_node->length.minutes = 0;
-  }
+  char *length = temp;
 
   //Stores the number of plays
   temp = strtok(NULL, delim);
@@ -98,6 +86,23 @@ Record *create_node(FILE *infile)
   {
     new_node->rating = 0;
   }
+
+  //Parses the length, now that the line is iterated over
+  char *min_or_sec = NULL;
+  min_or_sec = strtok(length, ":");
+  if (min_or_sec != '\0')
+  {
+    new_node->length.minutes = atoi(min_or_sec);
+    min_or_sec = strtok(NULL, ":");
+    new_node->length.seconds = atoi(min_or_sec);
+  }
+  else
+  {
+    new_node->length.minutes = 0;
+    new_node->length.minutes = 0;
+  }
+  /////////
+
   //Sets the pointers to null (for now...)
   new_node->previous = NULL;
   new_node->next = NULL;
@@ -134,7 +139,7 @@ void insert_at_end(struct record **head_ptr, FILE *infile)
   if (*head_ptr == NULL)
   {
     *head_ptr = create_node(infile);
-    printf("FIRST NODE ARTIST: %s\n\n", (*head_ptr)->artist);
+    //printf("FIRST NODE ARTIST: %s\n\n", (*head_ptr)->artist);
     (*head_ptr)->previous = NULL;
     (*head_ptr)->next = NULL;
   }
@@ -157,9 +162,12 @@ void insert_at_end(struct record **head_ptr, FILE *infile)
 //Function that creates the list
 void create_list(struct record **head_ptr, FILE *infile)
 {
+  int counter = 1;
   while (!feof(infile))
   {
     insert_at_end(head_ptr, infile);
+    //printf("Line %d\n", counter);
+    counter++;
   }
 
 }
