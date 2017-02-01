@@ -109,24 +109,63 @@ Record *create_node(FILE *infile)
   return new_node;
 }
 
-//Function that prints the playlist
+//Function that prints the playlist (either whole thing, or one artist)
 void print_list(struct record *pList)
 {
-       Record *current = pList;
-       while (current != NULL)
-       {
-              //Prints the data of current node
-              printf("TITLE: %s\n", current->title);
-              printf("ARTIST: %s\n", current->artist);
-              printf("ALBUM: %s\n", current->album);
-              printf("GENRE: %s\n", current->genre);
-              printf("TIME: %d:%d\n", current->length.minutes, current->length.seconds);
-              printf("NUM PLAYS: %d\n", current->num_plays);
-              printf("RATING: %d\n\n", current->rating);
+  //Gets the user's choice for printing
+  int choice = 0;
+  do
+  {
+    printf("Would you like to view songs by 1 artist, or all of them?\n");
+    printf("Enter 1 for a single artist, or 2 for all songs: ");
+    scanf("%d", &choice);
+  } while((choice != 1) & (choice != 2));
 
-              //Moves to the next item in the list
-              current = current->next;
-       }
+  Record *current = pList;
+  if (choice == 1) //Displays songs by 1 artist
+  {
+    //Gets the name of the artist
+    char artist_name[50];
+    printf("Enter the name of the artist: ");
+    fscanf(stdin, "%s", artist_name); //change this to fgets()
+
+    //Displays all songs by that artist
+    while (current != NULL)
+    {
+      if (strcmp(artist_name, current->artist) == 0)
+      {
+        printf("TITLE: %s\n", current->title);
+        printf("ARTIST: %s\n", current->artist);
+        printf("ALBUM: %s\n", current->album);
+        printf("GENRE: %s\n", current->genre);
+        printf("TIME: %d:%d\n", current->length.minutes, current->length.seconds);
+        printf("NUM PLAYS: %d\n", current->num_plays);
+        printf("RATING: %d\n\n", current->rating);
+      }
+
+     //Moves to the next item in the list
+     current = current->next;
+    }
+  }
+
+  else //Prints everything in the playlist
+  {
+    while (current != NULL)
+    {
+           //Prints the data of current node
+           printf("TITLE: %s\n", current->title);
+           printf("ARTIST: %s\n", current->artist);
+           printf("ALBUM: %s\n", current->album);
+           printf("GENRE: %s\n", current->genre);
+           printf("TIME: %d:%d\n", current->length.minutes, current->length.seconds);
+           printf("NUM PLAYS: %d\n", current->num_plays);
+           printf("RATING: %d\n\n", current->rating);
+
+           //Moves to the next item in the list
+           current = current->next;
+    }
+  }
+
 }
 
 //Function that inserts a new node at the end of the list
@@ -195,6 +234,27 @@ void create_list(struct record **head_ptr, FILE *infile)
 
 }
 
+//Function that stores the list back in the csv FILE
+void store_list(struct record *head, FILE *infile)
+{
+  //printf("\nStoring list....\n");
+  struct record *current = head;
+  while (current->next != NULL)
+  {
+    fprintf(infile, "%s,%s,%s,%s,%d:%d,%d,%d\n", current->artist, current->album,
+    current->title, current->genre, current->length.minutes, current->length.seconds,
+    current->num_plays, current->rating);
+
+    current = current->next;
+  }
+}
+
+//Function that allows a user to edit the list
+void edit_list(struct record *head)
+{
+  printf("Hello world\n");
+}
+
 //Function that frees the list
 void freeList(struct record *head)
 {
@@ -208,3 +268,18 @@ void freeList(struct record *head)
     }
 
 }
+
+/*
+Taylor Swift,1989,Shake it Off,Pop,3:35,12,3
+Drake,NOTHING WAS THE SAME,Own It,Rap,3:23,3,3
+Drake,YOU WELCOME,The Motto,Rap,4:13,7,4
+Christina Perri,HEAD OF HEART,Trust,Pop,2:35,3,5
+Justin Bieber,PURPOSE,No Sense,Pop,4:12,6,1
+Eminem,SHADYXV,Vegas,Rap,3:37,8,3
+Adele,25,Remedy,Pop,4:11,24,4
+Taylor Swift,RED,Stay Stay Stay,Pop,4:42,5,1
+Garth Brooks,FRESH HORSES,The Old Stuff,Country,2:57,11,2
+Nirvana,NEVERMIND,Come As You Are,Grunge,3:38,5,4
+Eminem,8 Mile,Lose Yourself,Rap,5:24,12,5
+Five Finger Death Punch,American Capitalist,Back For More,Hard Rock,2:34,8,4
+*/

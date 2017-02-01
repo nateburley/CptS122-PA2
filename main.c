@@ -7,7 +7,7 @@ int main(void)
   Record **head_ptr = &head;
   FILE *infile = NULL;
 
-  infile = fopen("musicPlayList.csv", "r");
+  infile = fopen("musicPlayList.csv", "rw");
   if (infile == NULL)
   {
     printf("ERROR OPENING FILE");
@@ -16,7 +16,7 @@ int main(void)
 
   create_list(head_ptr, infile);
   print_list(head);
-
+  store_list(head, infile);
 
   fclose(infile);
   freeList(*head_ptr);
