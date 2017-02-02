@@ -15,8 +15,9 @@ int main(void)
   }
 
   create_list(head_ptr, infile);
-  print_list(head);
+  //print_list(head);
   store_list(head, infile);
+  edit_list(head);
 
   fclose(infile);
   freeList(*head_ptr);

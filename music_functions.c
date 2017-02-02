@@ -252,7 +252,86 @@ void store_list(struct record *head, FILE *infile)
 //Function that allows a user to edit the list
 void edit_list(struct record *head)
 {
-  printf("Hello world\n");
+  //Gets the name of the artist
+  struct record *current = head;
+  int choice = 0;
+  char artist_search[50];
+  char new_field[50];
+  int temp_int = 0;
+  printf("Enter the artist to search: ");
+  fgets(artist_search, 50, stdin);
+
+  //Loops through; flags songs by chosen artist
+  while (current != NULL & choice == 0)
+  {
+    //printf("Current artist: %s  Strcmp: %d\n", current->artist, strcmp(artist_search, current->artist)); //For debugging
+    if (strcmp(artist_search, current->artist) == 10)
+    {
+      do {
+        printf("Is '%s' the song you want to edit?\n", current->title);
+        printf("Enter 1 for yes, 2 for no: ");
+        scanf(" %d", &choice);
+      } while((choice != 1) & (choice != 2));
+
+      if (choice == 1)
+      {
+        printf("Which field do you want to edit?\n");
+        printf("1) Artist\n2) Album\n3) Title\n4) Genre\n5) Length\n6) Number of plays\n7) Rating\n");
+        printf("Enter the field you wish to edit: ");
+        scanf(" %d", &choice);
+
+        switch (choice)
+        {
+          case 1:
+            printf("Enter the new artist: ");
+            //fgets(new_field, 50, stdin);
+            scanf(" %s", new_field);
+            strcpy(current->artist, new_field);
+            break;
+          case 2:
+            printf("Enter the new album: ");
+            //fgets(new_field, 50, stdin);
+            scanf(" %s", new_field);
+            strcpy(current->album, new_field);
+            break;
+          case 3:
+            printf("Enter the new title: ");
+            //fgets(new_field, 50, stdin);
+            scanf(" %s", new_field);
+            strcpy(current->title, new_field);
+            break;
+          case 4:
+            printf("Enter the new genre: ");
+            //fgets(new_field, 50, stdin);
+            scanf(" %s", new_field);
+            strcpy(current->genre, new_field);
+            break;
+          case 5:
+            printf("Enter the new number of minutes: ");
+            scanf(" %d", &temp_int);
+            current->length.minutes = temp_int;
+            printf("Enter the new number of seconds: ");
+            scanf(" %d", &temp_int);
+            current->length.seconds = temp_int;
+            break;
+          case 6:
+            printf("Enter the new number of plays: ");
+            scanf(" %d", &temp_int);
+            current->num_plays = temp_int;
+            break;
+          case 7:
+            printf("Enter the new rating: ");
+            scanf(" %d", &temp_int);
+            current->rating = temp_int;
+            break;
+        }
+        break;
+      }
+    }
+    current = current->next;
+    choice = 0;
+  }
+
 }
 
 //Function that frees the list
