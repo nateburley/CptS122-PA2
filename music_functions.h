@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct duration
 {
@@ -24,10 +25,13 @@ typedef struct record
   struct record *next;
 }Record;
 
+//Function that prints the main menu for the player
+void display_main_menu(void);
+
 //Function that creates a node; adds to front of list
 //Precondition: no commas in artist name, song title, album, or genre
 //              Because seriously. Who listens to "Swfit, Taylor"
-Record *create_node(FILE *infile);
+struct record *create_node(FILE *infile);
 
 //Function that prints the playlist (either whole thing, or one artist)
 void print_list(struct record *pList);
@@ -46,6 +50,16 @@ void store_list(struct record *head, FILE *infile);
 
 //Function that allows a user to edit the list
 void edit_list(struct record *head);
+
+//Function that allows a user to rate a song
+void rate_song(struct record *head);
+
+//Function that waits for a certain number of seconds;
+//Courtesy of http://stackoverflow.com/questions/3930363/implement-time-delay-in-c
+void waitFor(unsigned int seconds);
+
+//Function that plays a song (not really. But that would be cool)
+void play_song(struct record *head);
 
 //Function that frees the list
 void freeList(struct record *head);

@@ -1,7 +1,27 @@
 #include "music_functions.h"
 
+//Function that prints the main menu for the player
+void display_main_menu(void)
+{
+  int user_choice = 0;
+  printf("Welcome to Potify: The dankest music player on the market!\n\n");
+  printf("MAIN MENU:\n");
+  printf("(1) Load songs\n");
+  printf("(2) Store songs\n");
+  printf("(3) Display songs\n");
+  printf("(4) Insert songs\n");
+  printf("(5) Delete songs\n");
+  printf("(6) Edit songs\n");
+  printf("(7) Sort songs\n");
+  printf("(8) Rate songs\n");
+  printf("(9) Play songs\n");
+  printf("(10) Shuffle\n");
+  printf("(11) Exit\n");
+
+}
+
 //Function that creates a node; adds to front of list
-Record *create_node(FILE *infile)
+struct record *create_node(FILE *infile)
 {
   //Memory allocated for node; parsing variables declared
   Record *new_node = malloc(sizeof(struct record));
@@ -118,8 +138,8 @@ void print_list(struct record *pList)
   {
     printf("Would you like to view songs by 1 artist, or all of them?\n");
     printf("Enter 1 for a single artist, or 2 for all songs: ");
-    scanf("%d", &choice);
-  } while((choice != 1) & (choice != 2));
+    scanf(" %d", &choice);
+  } while((choice != 1) && (choice != 2));
 
   Record *current = pList;
   if (choice == 1) //Displays songs by 1 artist
@@ -127,12 +147,14 @@ void print_list(struct record *pList)
     //Gets the name of the artist
     char artist_name[50];
     printf("Enter the name of the artist: ");
-    fscanf(stdin, "%s", artist_name); //change this to fgets()
+    getchar();
+    fgets(artist_name, 50, stdin);
 
     //Displays all songs by that artist
     while (current != NULL)
     {
-      if (strcmp(artist_name, current->artist) == 0)
+      //printf("Artist searched: %s   Current artist: %s   Strcmp: %d\n", artist_name, current->artist, strcmp(artist_name, current->artist));
+      if (strcmp(artist_name, current->artist) == 10)
       {
         printf("TITLE: %s\n", current->title);
         printf("ARTIST: %s\n", current->artist);
@@ -146,6 +168,8 @@ void print_list(struct record *pList)
      //Moves to the next item in the list
      current = current->next;
     }
+    //system( "read -n 1 -s -p \"Print completed. Press any key to continue...\"" );
+    //system("clear");
   }
 
   else //Prints everything in the playlist
@@ -259,19 +283,20 @@ void edit_list(struct record *head)
   char new_field[50];
   int temp_int = 0;
   printf("Enter the artist to search: ");
+  getchar();
   fgets(artist_search, 50, stdin);
 
   //Loops through; flags songs by chosen artist
   while (current != NULL & choice == 0)
   {
-    //printf("Current artist: %s  Strcmp: %d\n", current->artist, strcmp(artist_search, current->artist)); //For debugging
-    if (strcmp(artist_search, current->artist) == 10)
+    //printf("Artist searched: %s   Current artist: %s  Strcmp: %d\n", artist_search, current->artist, strcmp(artist_search, current->artist)); //For debugging
+    if (strcmp(artist_search, current->artist) == 10) //space stuck at the end
     {
       do {
         printf("Is '%s' the song you want to edit?\n", current->title);
         printf("Enter 1 for yes, 2 for no: ");
         scanf(" %d", &choice);
-      } while((choice != 1) & (choice != 2));
+      } while((choice != 1) && (choice != 2));
 
       if (choice == 1)
       {
@@ -284,27 +309,35 @@ void edit_list(struct record *head)
         {
           case 1:
             printf("Enter the new artist: ");
-            //fgets(new_field, 50, stdin);
-            scanf(" %s", new_field);
+            getchar();
+            fgets(new_field, 50, stdin);
             strcpy(current->artist, new_field);
+            current->artist[strlen(current->artist)-1] = '\0';
+            printf("The new artist is %s\n", current->artist);
             break;
           case 2:
             printf("Enter the new album: ");
-            //fgets(new_field, 50, stdin);
-            scanf(" %s", new_field);
+            getchar();
+            fgets(new_field, 50, stdin);
             strcpy(current->album, new_field);
+            current->album[strlen(current->album)-1] = '\0';
+            printf("The new album is %s\n", current->album);
             break;
           case 3:
             printf("Enter the new title: ");
-            //fgets(new_field, 50, stdin);
-            scanf(" %s", new_field);
+            getchar();
+            fgets(new_field, 50, stdin);
             strcpy(current->title, new_field);
+            current->title[strlen(current->title)-1] = '\0';
+            printf("The new title is %s\n", current->title);
             break;
           case 4:
             printf("Enter the new genre: ");
-            //fgets(new_field, 50, stdin);
-            scanf(" %s", new_field);
+            getchar();
+            fgets(new_field, 50, stdin);
             strcpy(current->genre, new_field);
+            current->genre[strlen(current->genre)-1] = '\0';
+            printf("The new genre is %s\n", current->genre);
             break;
           case 5:
             printf("Enter the new number of minutes: ");
@@ -331,6 +364,107 @@ void edit_list(struct record *head)
     current = current->next;
     choice = 0;
   }
+  //Alerts the user their song/artist couldn't be found
+  if (current == NULL)
+  {
+    printf("Couldn't find the song/artist you wanted.\n");
+  }
+
+}
+
+//Function that allows a user to rate a song
+void rate_song(struct record *head)
+{
+  struct record *current = head;
+  int choice = 0;
+  char artist_search[50];
+
+  //Gets the artist to search for
+  printf("Enter the artist to search: ");
+  getchar();
+  fgets(artist_search, 50, stdin);
+
+  //Loops through list; flags songs by desired artist
+  while((current != NULL) & (choice == 0))
+  {
+    if (strcmp(artist_search, current->artist) == 0)
+    {
+      //Checks if the song is the one the user wants to edit
+      do {
+        printf("Is '%s' the song you want to rate?\n", current->title);
+        printf("Enter 1 for yes, 2 for no: ");
+        scanf(" %d", &choice);
+      } while((choice != 1) & (choice != 2));
+
+      //Allows the user to rate the song, if they chose it
+      if (choice == 1)
+      {
+        int new_rating = 0;
+        do {
+          printf("Enter a new rating: ");
+          scanf(" %d", &new_rating);
+        } while((new_rating < 1) & (new_rating > 5));
+        current->rating = new_rating;
+        printf("The new rating of %s is %d\n", current->title, current->rating);
+        return;
+      }
+
+    }
+
+    current = current->next;
+    choice = 0;
+  }
+  //Alerts the user their song/artist couldn't be found
+  if (current == NULL)
+  {
+    printf("Couldn't find the song/artist you wanted.\n");
+  }
+}
+
+//Function that waits for a certain number of seconds;
+//Courtesy of http://stackoverflow.com/questions/3930363/implement-time-delay-in-c
+void waitFor(unsigned int seconds)
+{
+  unsigned int retTime = time(0) + seconds;   // Get finishing time.
+  while (time(0) < retTime);               // Loop until it arrives.
+}
+
+//Function that plays a song (not really. But that would be cool)
+void play_song(struct record *head)
+{
+  struct record *current = head;
+  char song_choice[50];
+  int start_playing = 0;
+
+  //Gets song choice
+  printf("Enter a song to start with: ");
+  getchar();
+  fgets(song_choice, 50, stdin);
+
+  //Searches for the song
+  while(current != NULL)
+  {
+    //printf("Song choice: %s   Current title: %s  Strcmp: %d\n", song_choice, current->title, strcmp(song_choice, current->title)); //For debugging
+    if (strcmp(song_choice, current->title) == 10)
+    {
+      start_playing = 1;
+    }
+    if (start_playing == 1)
+    {
+      printf("Playing %s...\n", current->next->title);
+      int counter = 0;
+      while(counter < 10)
+      {
+        printf("*pretend you hear music*\n");
+        waitFor(2);
+        counter++;
+      }
+      system( "read -n 1 -s -p \"Press any key to continue...\"" );
+      system("clear");
+    }
+    current = current->next;
+    //system("clear");
+  }
 
 }
 
@@ -350,15 +484,19 @@ void freeList(struct record *head)
 
 /*
 Taylor Swift,1989,Shake it Off,Pop,3:35,12,3
+Disturbed,THE SICKNESS,Down With The Sickness,Hard Rock,4:39,8,4
 Drake,NOTHING WAS THE SAME,Own It,Rap,3:23,3,3
+Disturbed,ASYLUM,Asylum,Hard Rock,4:36,2,4
 Drake,YOU WELCOME,The Motto,Rap,4:13,7,4
 Christina Perri,HEAD OF HEART,Trust,Pop,2:35,3,5
 Justin Bieber,PURPOSE,No Sense,Pop,4:12,6,1
 Eminem,SHADYXV,Vegas,Rap,3:37,8,3
 Adele,25,Remedy,Pop,4:11,24,4
+Disturbed,INDESTRUCTIBLE,The Night,Hard Rock,4:46,7,3
 Taylor Swift,RED,Stay Stay Stay,Pop,4:42,5,1
 Garth Brooks,FRESH HORSES,The Old Stuff,Country,2:57,11,2
 Nirvana,NEVERMIND,Come As You Are,Grunge,3:38,5,4
 Eminem,8 Mile,Lose Yourself,Rap,5:24,12,5
 Five Finger Death Punch,American Capitalist,Back For More,Hard Rock,2:34,8,4
+Disturbed,INDESTRUCTIBLE,Indestructible,Hard Rock,4:38,11,5
 */
