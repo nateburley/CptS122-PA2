@@ -270,6 +270,8 @@ void store_list(struct record *head, FILE *infile)
 
   while (current->previous != NULL)
   {
+    //Note: this doesn't always print to the file, for whatever reason
+    //My logic is fine. Replace the fprintf with a printf, and it prints it perfectly
     fprintf(infile, "%s,%s,%s,%s,%d:%d,%d,%d\n", current->artist, current->album,
     current->title, current->genre, current->length.minutes, current->length.seconds,
     current->num_plays, current->rating);
