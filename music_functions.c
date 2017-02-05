@@ -387,7 +387,7 @@ void rate_song(struct record *head)
   //Loops through list; flags songs by desired artist
   while((current != NULL) & (choice == 0))
   {
-    if (strcmp(artist_search, current->artist) == 0)
+    if (strcmp(artist_search, current->artist) == 10)
     {
       //Checks if the song is the one the user wants to edit
       do {
@@ -451,7 +451,7 @@ void play_song(struct record *head)
     }
     if (start_playing == 1)
     {
-      printf("Playing %s...\n", current->next->title);
+      printf("Playing %s...\n", current->title);
       int counter = 0;
       while(counter < 10)
       {
