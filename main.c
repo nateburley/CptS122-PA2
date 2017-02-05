@@ -10,7 +10,7 @@ int main(void)
   int keep_playing = 1;
   int c;
 
-  infile = fopen("musicPlayList.csv", "rw");
+  infile = fopen("musicPlayList.csv", "r+");
   if (infile == NULL)
   {
     printf("ERROR OPENING FILE");
@@ -98,6 +98,7 @@ int main(void)
       system("clear");
   }
 
+  store_list(head, infile);
   fclose(infile);
   freeList(*head_ptr);
   return 0;

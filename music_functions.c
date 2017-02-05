@@ -263,13 +263,18 @@ void store_list(struct record *head, FILE *infile)
 {
   //printf("\nStoring list....\n");
   struct record *current = head;
-  while (current->next != NULL)
+  while(current->next != NULL)
+  {
+    current = current->next;
+  }
+
+  while (current->previous != NULL)
   {
     fprintf(infile, "%s,%s,%s,%s,%d:%d,%d,%d\n", current->artist, current->album,
     current->title, current->genre, current->length.minutes, current->length.seconds,
     current->num_plays, current->rating);
 
-    current = current->next;
+    current = current->previous;
   }
 }
 
@@ -440,12 +445,13 @@ void play_song(struct record *head)
   printf("Enter a song to start with: ");
   getchar();
   fgets(song_choice, 50, stdin);
+  song_choice[strlen(song_choice)-1] = '\0';
 
   //Searches for the song
   while(current != NULL)
   {
     //printf("Song choice: %s   Current title: %s  Strcmp: %d\n", song_choice, current->title, strcmp(song_choice, current->title)); //For debugging
-    if (strcmp(song_choice, current->title) == 10)
+    if (strcmp(song_choice, current->title) == 0)
     {
       start_playing = 1;
     }
