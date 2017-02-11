@@ -1,3 +1,7 @@
+//NAME: Nathaniel Burley 11507009
+//Computer Science 122
+//Lab Section 04
+
 #include "music_functions.h"
 
 //Function that prints the main menu for the player
@@ -181,7 +185,14 @@ void print_list(struct record *pList)
            printf("ARTIST: %s\n", current->artist);
            printf("ALBUM: %s\n", current->album);
            printf("GENRE: %s\n", current->genre);
-           printf("TIME: %d:%d\n", current->length.minutes, current->length.seconds);
+           if (current->length.seconds > 9)
+           {
+             printf("TIME: %d:%d\n", current->length.minutes, current->length.seconds);
+           }
+           else
+           {
+             printf("TIME: %d:0%d\n", current->length.minutes, current->length.seconds);
+           }
            printf("NUM PLAYS: %d\n", current->num_plays);
            printf("RATING: %d\n\n", current->rating);
 
@@ -218,6 +229,73 @@ void insert_at_end(struct record **head_ptr, FILE *infile)
     current->next = new_node;
     new_node->previous = current;
     new_node->next = NULL;
+  }
+}
+
+//Function that prompts for a new node, inserts at front of list
+void prompt_and_insert(struct record **head_ptr)
+{
+  //Memory allocated for new record; getchar() called to clear stdin buffer
+  Record *new_song = malloc(sizeof(Record));
+  getchar();
+
+  //User prompted for new song information
+  char holder[50];
+  //Artist information got and stored
+  printf("Enter the new artist: ");
+  fgets(holder, 50, stdin);
+  strcpy(new_song->artist, holder);
+  new_song->artist[strlen(new_song->artist)-1] = '\0';
+
+  //Album information got and stored
+  printf("Enter the new album: ");
+  fgets(holder, 50, stdin);
+  strcpy(new_song->album, holder);
+  new_song->album[strlen(new_song->album)-1] = '\0';
+
+  //Title information got and stored
+  printf("Enter the new title: ");
+  fgets(holder, 50, stdin);
+  strcpy(new_song->title, holder);
+  new_song->title[strlen(new_song->title)-1] = '\0';
+
+  //Genre information got and stored
+  printf("Enter the new genre: ");
+  fgets(holder, 50, stdin);
+  strcpy(new_song->genre, holder);
+  new_song->genre[strlen(new_song->genre)-1] = '\0';
+
+  //Song time entered
+  int min = 0, sec = 0;
+  printf("Enter the number of minutes: ");
+  scanf(" %d", &min);
+  printf("Enter the number of seconds: ");
+  scanf(" %d", &sec);
+  new_song->length.minutes = min;
+  new_song->length.seconds = sec;
+
+  //Initial rating entered
+  int rating = 0;
+  printf("Enter the initial rating: ");
+  scanf(" %d", &rating);
+  new_song->rating = rating;
+
+  //Puts the newly created node at the head of the list
+  if (*head_ptr == NULL)
+  {
+    *head_ptr = new_song;
+    new_song->next = NULL;
+    new_song->previous = NULL;
+    printf("Song inserted into empty list successfully.\n");
+    return;
+  }
+  else
+  {
+    new_song->next = *head_ptr;
+    new_song->previous = NULL;
+    *head_ptr = new_song;
+    printf("Song inserted into list successfully.\n");
+    return;
   }
 }
 
@@ -460,6 +538,7 @@ void play_song(struct record *head)
     if (start_playing == 1)
     {
       printf("Playing %s...\n", current->title);
+      current->num_plays += 1;
       int counter = 0;
       while(counter < 10)
       {

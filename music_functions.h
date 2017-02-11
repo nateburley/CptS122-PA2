@@ -1,3 +1,7 @@
+//NAME: Nathaniel Burley 11507009
+//Computer Science 122
+//Lab Section 04
+
 #ifndef MUSIC_M_H
 #define MUSIC_M_H
 
@@ -14,7 +18,7 @@ typedef struct duration
 
 typedef struct record
 {
-  char artist[50];
+  char artist[50]; //I'll user char stars and malloc() next time. Promise
   char album[50];
   char title[50];
   char genre[50];
@@ -38,6 +42,9 @@ void print_list(struct record *pList);
 
 //Function that inserts a new node at the end of the list
 void insert_at_end(struct record **head_ptr, FILE *infile);
+
+//Function that prompts for a new node, inserts at front of list
+void prompt_and_insert(struct record **head_ptr);
 
 //Function that inserts a new node at the beginning of the list
 void insert_at_front(struct record **head_ptr, FILE *infile);

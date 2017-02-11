@@ -1,3 +1,10 @@
+//NAME: Nathaniel Burley 11507009
+//Computer Science 122
+//Lab Section 04
+
+//Note: My text editor saves a blank line at the end of files.
+//      Thats where the weird "Unknown" song comes from
+
 #include "music_functions.h"
 #include "music_functions.c"
 
@@ -45,11 +52,12 @@ int main(void)
 
       case 3:
         print_list(head);
+        system( "read -n 1 -s -p \"Press any key to continue...\"" );
+        system("clear");
         break;
 
       case 4:
-        printf("Uh oh! This feature is not available for Potify Lite!\n");
-        printf("You must upgrade to Potify Pro for access\n");
+        prompt_and_insert(head_ptr);
         system( "read -n 1 -s -p \"Press any key to continue...\"" );
         system("clear");
         break;
@@ -63,6 +71,8 @@ int main(void)
 
       case 6:
         edit_list(head);
+        system( "read -n 1 -s -p \"Press any key to continue...\"" );
+        system("clear");
         break;
 
       case 7:
@@ -74,6 +84,8 @@ int main(void)
 
       case 8:
         rate_song(head);
+        system( "read -n 1 -s -p \"Press any key to continue...\"" );
+        system("clear");
         break;
 
       case 9:
@@ -94,8 +106,6 @@ int main(void)
         keep_playing = 0;
 
       }
-      system( "read -n 1 -s -p \"Press any key to continue...\"" );
-      system("clear");
   }
 
   store_list(head, infile);
