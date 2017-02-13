@@ -12,6 +12,7 @@ int main(void)
 {
   Record *head = NULL;
   Record **head_ptr = &head;
+  Record *current = head;
   FILE *infile = NULL;
   int current_action = 0;
   int keep_playing = 1;
@@ -23,9 +24,18 @@ int main(void)
     printf("ERROR OPENING FILE");
     return 1;
   }
-
+  /*
   create_list(head_ptr, infile);
-
+  sort_by_artist(head_ptr);
+  printf("\n\n");
+  while(current != NULL)
+  {
+    printf("Artist: %s\n", current->artist);
+    current = current->next;
+  }
+  current = head;
+  */
+  create_list(head_ptr, infile);
   while(keep_playing == 1)
   {
     display_main_menu();
@@ -63,8 +73,7 @@ int main(void)
         break;
 
       case 5:
-        printf("Uh oh! This feature is not available for Potify Lite!\n");
-        printf("You must upgrade to Potify Pro for access\n");
+        delete_song(head_ptr);
         system( "read -n 1 -s -p \"Press any key to continue...\"" );
         system("clear");
         break;
@@ -108,7 +117,7 @@ int main(void)
       }
   }
 
-  store_list(head, infile);
+  //store_list(head, infile);
   fclose(infile);
   freeList(*head_ptr);
   return 0;

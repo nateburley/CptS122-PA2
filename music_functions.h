@@ -68,6 +68,15 @@ void waitFor(unsigned int seconds);
 //Function that plays a song (not really. But that would be cool)
 void play_song(struct record *head);
 
+//Function that sorts a list alphabetically by artist
+void sort_by_artist(struct record **head_ptr);
+
+//Function that deletes a song from the list
+void delete_song(struct record **head_ptr);
+
+//Function that plays songs on Shuffle
+void play_shuffle(struct record *head);
+
 //Function that frees the list
 void freeList(struct record *head);
 

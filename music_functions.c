@@ -555,6 +555,165 @@ void play_song(struct record *head)
 
 }
 
+//Function that sorts a list alphabetically by artist
+//Loops through the list, adds everything in it's proper place to new list
+void sort_by_artist(struct record **head_ptr)
+{
+  Record *new_head = NULL, *current = *head_ptr, *new_current = NULL, *temp = NULL;
+  int counter = 1;
+
+  while(current != NULL)
+  {
+    printf("Current Artist: %s  ", current->artist);
+    if (new_head == NULL)
+    {
+      //printf("First in the list!\n");
+      temp = current->next;
+      new_head = current;
+      current->next = NULL;
+      current->previous = NULL;
+
+      current = temp;
+    }
+    else if(strcmp(current->artist, new_current->artist) < 0)
+    {
+      printf("Making it first in the list!\n");
+      temp = current->next;
+      current->previous = NULL;
+      current->next = new_head;
+      new_head = current;
+
+      current = temp;
+    }
+    else
+    {
+      //Main body of the sort
+      while(new_current->next != NULL && strcmp(current->artist, new_current->artist) >= 0)
+      {
+        new_current = new_current->next;
+        printf("STRING COMPARE: %d  ", strcmp(current->artist, new_current->artist));
+      }
+
+      if (strcmp(current->next->artist, new_current->artist) < 0)
+      {
+        printf("Putting it inbetween 2 things!\n");
+        Record *right = new_current->next;
+        printf("1\n");
+        temp = current->next;
+        printf("2\n");
+
+        current->previous = new_current;
+        printf("3\n");
+        current->next = new_current->next;
+        printf("4\n");
+        new_current->next = current;
+        printf("5\n");
+        //right->previous = current;
+        printf("6\n");
+
+        current = temp;
+      }
+      else if (new_current->next == NULL)
+      {
+        printf("Sticking it at the end of the list!\n");
+        //printf("The problem lies below 584\n");
+        temp = current->next;
+        //printf("The problem lies below 586\n");
+        new_current->next = current;
+        //printf("The problem lies below 588\n");
+        current->next = NULL;
+        //printf("The problem lies below 590\n");
+        current->previous = new_current;
+        //printf("The problem lies below 593\n");
+        current = temp;
+      }
+      else
+      {
+        printf("\nYOU SHOULD NOT SEE THIS!!!\n");
+        current = current->next;
+      }
+      /*
+      else
+      {
+        printf("Putting it inbetween 2 things!\n");
+        Record *right = new_current->next;
+        temp = current->next;
+
+        current->previous = new_current;
+        current->next = new_current->next;
+        new_current->next = current;
+        right->previous = current;
+
+        current = temp;
+      }
+      */
+    }
+    counter++;
+    print_list(new_head);
+    system( "read -n 1 -s -p \"Press any key to continue...\"" );
+    system("clear");
+    //printf("The problem lies below 597\n");
+    new_current = new_head;
+    //printf("The problem lies below 599\n");
+    //printf("Current Song (end): %s\n\n", current->title);
+  }
+
+  //printf("The problem lies below 603\n");
+  (*head_ptr) = new_head;
+}
+
+//Function that deletes a song from the list
+void delete_song(struct record **head_ptr)
+{
+  char holder[50];
+  Record *current = *head_ptr;
+  //Gets the song to delete
+  printf("Enter a song to delete: ");
+  getchar();
+  fgets(holder, 50, stdin);
+  //Loops until it finds the song
+  if (strcmp(holder, (*head_ptr)->title) == 10)
+  {
+    Record *temp = (*head_ptr);
+    *head_ptr = (*head_ptr)->next;
+    free(temp);
+    printf("Successfully deleted %s\n", holder);
+    return;
+  }
+  else
+  {
+    while (current != NULL && strcmp(holder, current->title) != 10) //10 because space
+    {
+      //printf("STRCMP: %d\n", strcmp(holder, current->title));
+      current = current->next;
+    }
+    if (current == NULL)
+    {
+      printf("ERROR. Track not found.\n");
+      return;
+    }
+    else if (strcmp(holder, current->title) == 10)
+    {
+      current->previous->next = current->next;
+      current->next->previous = current->previous;
+      free(current);
+      printf("Successfully deleted %s\n", holder);
+      return;
+    }
+    else
+    {
+      printf("Something went wrong. You should not see this. Contact tech support\n");
+      return;
+    }
+  }
+}
+
+//Function that plays songs on Shuffle
+void play_shuffle(struct record *head)
+{
+  return;
+}
+
 //Function that frees the list
 void freeList(struct record *head)
 {
