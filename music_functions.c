@@ -711,7 +711,75 @@ void delete_song(struct record **head_ptr)
 //Function that plays songs on Shuffle
 void play_shuffle(struct record *head)
 {
-  return;
+  system("clear");
+  //Gets the size of the array
+  int size = 0;
+  Record *current = head;
+  while(current != NULL)
+  {
+    current = current->next;
+    size++;
+  }
+  current = head;
+
+  //Array created to store tracks already played
+  int *songs_played = (int *) malloc(sizeof(int) * size + 1);
+
+  //Random track generated
+  int counter = 1, random_song = 1, check = 0;
+  while (counter < size+1)
+  {
+    //Makes sure the random song hasn't been played yet
+    random_song = (rand() % size) + 1;
+    while(songs_played[random_song] != 0)
+    {
+      random_song = (rand() % size) + 1;
+    }
+    //printf("Random song: %d\n", random_song);
+
+    //Loops through list to the song
+    int loop_counter = 1;
+    while (loop_counter != random_song && current->next != NULL)
+    {
+      current = current->next;
+      loop_counter += 1;
+    }
+
+    //Plays the song
+    int time_counter = 0;
+    printf("Playing '%s' by %s\n", current->title, current->artist);
+    while(time_counter < 7) //change to 10
+    {
+      printf("*pretend you hear music*\n");
+      waitFor(2);
+      time_counter++;
+    }
+
+
+    //Resets for next time; marks song as played
+    time_counter = 0;
+    loop_counter = 0;
+    current = head;
+    check = 1;
+    songs_played[random_song] = 1;
+    random_song = 0;
+    counter += 1;
+
+    //For debugging
+    /*
+    for (int i=1; i<size+1; i++)
+    {
+      printf("%d  ", songs_played[i]);
+    }
+    printf("\n");
+    */
+
+    waitFor(3);
+    system("clear");
+  }
+  system("clear");
+  printf("All songs played\n");
+  free(songs_played);
 }
 
 //Function that frees the list

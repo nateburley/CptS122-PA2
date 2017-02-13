@@ -10,6 +10,7 @@
 
 int main(void)
 {
+  srand((unsigned int) time(NULL));
   Record *head = NULL;
   Record **head_ptr = &head;
   Record *current = head;
@@ -104,8 +105,7 @@ int main(void)
         break;
 
       case 10:
-        printf("Uh oh! This feature is not available for Potify Lite!\n");
-        printf("You must upgrade to Potify Pro for access\n");
+        play_shuffle(head);
         system( "read -n 1 -s -p \"Press any key to continue...\"" );
         system("clear");
         break;
